@@ -1,0 +1,25 @@
+pragma solidity ^0.4.11;
+
+import './{{  TOKEN_CLASS_NAME }}.sol';
+import './Crowdsale.sol';
+
+
+contract {{ CROWDSALE_CLASS_NAME }} is Crowdsale {
+
+  function {{ CROWDSALE_CLASS_NAME }}(uint256 _startBlock, uint256 _endBlock, uint256 _rate, address _wallet) Crowdsale(_startBlock, _endBlock, _rate, _wallet){
+    require(_startBlock >= block.number);
+    require(_endBlock >= _startBlock);
+    require(_rate > 0);
+    require(_wallet != 0x0);
+
+    token = createTokenContract();
+    startBlock = _startBlock;
+    endBlock = _endBlock;
+    rate = _rate;
+    wallet = _wallet;
+  }
+
+  function createTokenContract() internal returns (MintableToken) {
+    return new {{ TOKEN_CLASS_NAME }}();
+  }
+}

@@ -1,0 +1,27 @@
+pragma solidity ^0.4.11;
+
+import './{{  TOKEN_CLASS_NAME }}.sol';
+import './CappedCrowdsale.sol';
+
+
+contract {{ CROWDSALE_CLASS_NAME }} is CappedCrowdsale {
+
+  function {{ CROWDSALE_CLASS_NAME }}(uint256 _startBlock, uint256 _endBlock, uint256 _rate, address _wallet, uint256 _cap) Crowdsale(_startBlock, _endBlock, _rate, _wallet) CappedCrowdsale(_cap) {
+    require(_startBlock >= block.number);
+    require(_endBlock >= _startBlock);
+    require(_rate > 0);
+    require(_wallet != 0x0);
+
+    token = createTokenContract();
+    startBlock = _startBlock;
+    endBlock = _endBlock;
+    rate = _rate;
+    wallet = _wallet;
+
+    cap = _cap;
+  }
+
+  function createTokenContract() internal returns (MintableToken) {
+    return new {{ TOKEN_CLASS_NAME }}();
+  }
+}
